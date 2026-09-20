@@ -7,52 +7,6 @@ app.use(express.json());
 //a simple array to act as our "database"
 let users = [];
 
-//==================
-// Morgan - Resource
-//==================
-
-//========================
-// Jamie - Avatar Resource
-//========================
-
-// GET endpoint to retrieve all instances of the Avatar resource
-app.get('/api/avatars', (req, res) => {
-  //return ok status and array of avatars
-  res.status(200).json(avatars);
-});
-
-// POST endpoint to create a new instance of the Avatar resource
-app.post('/api/avatars', (req, res) => {
-  //get data from request body
-  const { name, color, price } = req.body;
-
-  // POST endpoint check to ensure the data sent from the client is valid
-  if(!name || !color || !price){ //validate required fields
-    return res.status(400).json({
-      error: 'Missing required fields: name, color, and price are required.'
-    })
-  }
-  if(typeof price !== 'number'){ //validate price is a number
-    return res.status(400).json({
-      error: 'Invalid data type: price must be a number.'
-    })
-  }
-
-  //create a new avatar object
-  const newAvatar = {
-    id: avatars.length + 1,
-    name: name,
-    color: color,
-    price: price
-  };
-
-  //add new avatar to array
-  avatars.push(newAvatar);
-
-  //respond with created status and new avatar object
-  res.status(201).json(newAvatar);
-});
-
 //=====================
 //Bobby - User Resource
 //=====================
@@ -160,6 +114,95 @@ app.delete('/api/users/:id', (req, res) => {
     user: deletedUser[0]
   });
 });
+
+
+//==================
+// Morgan - Bot Resource
+//==================
+
+//simple array to store bot instances
+let bots = [];
+
+//GET endpoint to retrieve all bots
+app.get('/api/bots', (req, res) => {
+  res.status(200).json(bots);
+});
+
+//POST endpoint to create a new bot
+app.post('/api/bots', (req, res) => {
+  // 1. Get data from the request body
+  const { name, gameType } = req.body;
+
+  //basic validation: check if required fields exist
+  if (!name || !gameType) {
+    return res.status(400).json({
+      error: 'Missing required fields: name and gameType are required.'
+    });
+  }
+
+  //check that gameType is a valid string
+  if (typeof gameType !== 'string') {
+    return res.status(400).json({
+      error: 'Invalid data type: gameType must be a string.'
+    });
+  }
+
+  //create a new bot object and push to the array
+  const newBot = {
+    id: bots.length + 1,
+    name: name,
+    gameType: gameType, //"Go-Fish" or "Blackjack"
+    score: 0
+  };
+  bots.push(newBot);
+
+  //respond with a created status and new bot object
+  res.status(201).json(newBot);
+});
+
+
+//========================
+// Jamie - Avatar Resource
+//========================
+
+// GET endpoint to retrieve all instances of the Avatar resource
+app.get('/api/avatars', (req, res) => {
+  //return ok status and array of avatars
+  res.status(200).json(avatars);
+});
+
+// POST endpoint to create a new instance of the Avatar resource
+app.post('/api/avatars', (req, res) => {
+  //get data from request body
+  const { name, color, price } = req.body;
+
+  // POST endpoint check to ensure the data sent from the client is valid
+  if(!name || !color || !price){ //validate required fields
+    return res.status(400).json({
+      error: 'Missing required fields: name, color, and price are required.'
+    })
+  }
+  if(typeof price !== 'number'){ //validate price is a number
+    return res.status(400).json({
+      error: 'Invalid data type: price must be a number.'
+    })
+  }
+
+  //create a new avatar object
+  const newAvatar = {
+    id: avatars.length + 1,
+    name: name,
+    color: color,
+    price: price
+  };
+
+  //add new avatar to array
+  avatars.push(newAvatar);
+
+  //respond with created status and new avatar object
+  res.status(201).json(newAvatar);
+});
+
 
 //=================
 // Start the server
