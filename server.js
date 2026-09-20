@@ -28,7 +28,7 @@ app.get('/api/users/:id', (req, res) => {
 });
 
 //POST - create a new user
-app post('/api/users', (req, res) => {
+app.post('/api/users', (req, res) => {
   const { name, email } = req.body;
 
     if (!name || !email) {
@@ -113,4 +113,4 @@ app.delete('/api/users/:id', (req, res) => {
 
 // Start the server
 const PORT = 3000;
-app. listen(PORT, () => console.log('Server running on port ${PORT}')) ;
+app.listen(PORT, () => console.log('Server running on port ${PORT}'));
