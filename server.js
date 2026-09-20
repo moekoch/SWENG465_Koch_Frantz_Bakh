@@ -7,6 +7,18 @@ app.use(express.json());
 //a simple array to act as our "database"
 let users = [];
 
+//==================
+// Morgan - Resource
+//==================
+
+//=================
+// Jamie - Resource
+//=================
+
+//=====================
+//Bobby - User Resource
+//=====================
+
 //GET - get all users
 app.get('/api/users', (req, res) => {
 	res.status(200).json(users);
@@ -111,6 +123,8 @@ app.delete('/api/users/:id', (req, res) => {
   });
 });
 
+//=================
 // Start the server
+//=================
 const PORT = 3000;
 app.listen(PORT, () => console.log('Server running on port ${PORT}'));
