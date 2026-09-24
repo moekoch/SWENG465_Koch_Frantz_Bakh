@@ -1,23 +1,34 @@
 //server.js
 const express = require('express');
 
-//import route functions - Avatar
+//=======================
+// import route functions
+//=======================
+
+//Avatar
 const createAvatar = require('.routes/avatar/createAvatar');
 const getAvatars = require('.routes/avatar/getAvatars');
 
-//import route functions - Bot
+//Bot
 const createBot = require('.routes/bot/createBot');
 const getBots = require('.routes/bot/getBots');
 
-//create express app
+//===================
+// create express app
+//===================
+
 const app = express();
 app.use(express.json());
 
-//create API endpoints - Avatar
+//=====================
+// create API endpoints
+//=====================
+
+//Avatar
 app.post('api/avatars', createAvatar);
 app.get('api/avatars', getAvatars);
 
-//create API endpoints - Bot
+//Bot
 app.post('api/bots', createBot);
 app.get('api/bots', getBots);
 
@@ -132,6 +143,8 @@ app.delete('/api/users/:id', (req, res) => {
   });
 });
 
-//start the server
+//=================
+// start the server
+//=================
 const PORT = 3000;
 app.listen(PORT, () => console.log('Server running on port ${PORT}'));
