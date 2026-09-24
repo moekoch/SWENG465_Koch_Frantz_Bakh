@@ -1,8 +1,17 @@
 //server.js
-
 const express = require('express');
+
+//import route functions
+const createAvatar = require('.routes/avatar/createAvatar');
+const getAvatars = require('.routes/avatar/getAvatars');
+
+//create express app
 const app = express();
 app.use(express.json());
+
+//create API endpoints
+app.post('api/avatars', createAvatar);
+app.get('api/avatars', getAvatars);
 
 //a simple array to act as our "database"
 let users = [];
@@ -160,52 +169,6 @@ app.post('/api/bots', (req, res) => {
   res.status(201).json(newBot);
 });
 
-
-//========================
-// Jamie - Avatar Resource
-//========================
-
-// GET endpoint to retrieve all instances of the Avatar resource
-app.get('/api/avatars', (req, res) => {
-  //return ok status and array of avatars
-  res.status(200).json(avatars);
-});
-
-// POST endpoint to create a new instance of the Avatar resource
-app.post('/api/avatars', (req, res) => {
-  //get data from request body
-  const { name, color, price } = req.body;
-
-  // POST endpoint check to ensure the data sent from the client is valid
-  if(!name || !color || !price){ //validate required fields
-    return res.status(400).json({
-      error: 'Missing required fields: name, color, and price are required.'
-    })
-  }
-  if(typeof price !== 'number'){ //validate price is a number
-    return res.status(400).json({
-      error: 'Invalid data type: price must be a number.'
-    })
-  }
-
-  //create a new avatar object
-  const newAvatar = {
-    id: avatars.length + 1,
-    name: name,
-    color: color,
-    price: price
-  };
-
-  //add new avatar to array
-  avatars.push(newAvatar);
-
-  //respond with created status and new avatar object
-  res.status(201).json(newAvatar);
-});
-
-
-//=================
-// Start the server
-//=================
+//start the server
 const PORT = 3000;
 app.listen(PORT, () => console.log('Server running on port ${PORT}'));
