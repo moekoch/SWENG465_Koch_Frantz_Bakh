@@ -1,24 +1,26 @@
 // server.js
+require('dotenv').config();
 const express = require('express');
+const { connectDB } = require('./services/database')
 
 //=======================
 // import route functions
 //=======================
 
 // avatar
-const createAvatar = require('.routes/avatar/createAvatar');
-const getAvatars = require('.routes/avatar/getAvatars');
+const createAvatar = require('./routes/avatar/createAvatar');
+const getAvatars = require('./routes/avatar/getAvatars');
 
 // bot
-const createBot = require('.routes/bot/createBot');
-const getBots = require('.routes/bot/getBots');
+const createBot = require('./routes/bot/createBot');
+const getBots = require('./routes/bot/getBots');
 
 // user
-const createUser = require('.routes/user/createUser');
-const getUsers = require('.routes/user/getUsers');
-const getUser = require('.routes/user/getUser');
-const updateUser = require('.routes/user/updateUser');
-const deleteUser = require('.routes/user/deleteUser');
+const createUser = require('./routes/user/createUser');
+const getUsers = require('./routes/user/getUsers');
+const getUser = require('./routes/user/getUser');
+const updateUser = require('./routes/user/updateUser');
+const deleteUser = require('./routes/user/deleteUser');
 
 //===================
 // create express app
@@ -32,22 +34,30 @@ app.use(express.json());
 //=====================
 
 // avatar
-app.post('api/avatars', createAvatar);
-app.get('api/avatars', getAvatars);
+app.post('/api/avatars', createAvatar);
+app.get('/api/avatars', getAvatars);
 
 // bot
-app.post('api/bots', createBot);
-app.get('api/bots', getBots);
+app.post('/api/bots', createBot);
+app.get('/api/bots', getBots);
 
 // user
-app.get('/api/user', createUser);
+app.post('/api/user', createUser);
 app.get('/api/user', getUsers);
 app.get('/api/user/:id', getUser);
-app.get('/api/user/:id', updateUser);
-app.get('/api/user/:id', deleteUser);
+app.put('/api/user/:id', updateUser);
+app.delete('/api/user/:id', deleteUser);
 
 //=================
 // start the server
 //=================
 const PORT = 3000;
-app.listen(PORT, () => console.log('Server running on port ${PORT}'));
+connectDB()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    })
+    .catch((error) => {
+        console.error(`Failed to connect to MongoDB: ${error}`);
+    });
