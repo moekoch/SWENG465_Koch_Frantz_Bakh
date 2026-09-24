@@ -1,17 +1,25 @@
 //server.js
 const express = require('express');
 
-//import route functions
+//import route functions - Avatar
 const createAvatar = require('.routes/avatar/createAvatar');
 const getAvatars = require('.routes/avatar/getAvatars');
+
+//import route functions - Bot
+const createBot = require('.routes/bot/createBot');
+const getBots = require('.routes/bot/getBots');
 
 //create express app
 const app = express();
 app.use(express.json());
 
-//create API endpoints
+//create API endpoints - Avatar
 app.post('api/avatars', createAvatar);
 app.get('api/avatars', getAvatars);
+
+//create API endpoints - Bot
+app.post('api/bots', createBot);
+app.get('api/bots', getBots);
 
 //a simple array to act as our "database"
 let users = [];
@@ -122,51 +130,6 @@ app.delete('/api/users/:id', (req, res) => {
     message: 'User deleted successfully',
     user: deletedUser[0]
   });
-});
-
-
-//==================
-// Morgan - Bot Resource
-//==================
-
-//simple array to store bot instances
-let bots = [];
-
-//GET endpoint to retrieve all bots
-app.get('/api/bots', (req, res) => {
-  res.status(200).json(bots);
-});
-
-//POST endpoint to create a new bot
-app.post('/api/bots', (req, res) => {
-  // 1. Get data from the request body
-  const { name, gameType } = req.body;
-
-  //basic validation: check if required fields exist
-  if (!name || !gameType) {
-    return res.status(400).json({
-      error: 'Missing required fields: name and gameType are required.'
-    });
-  }
-
-  //check that gameType is a valid string
-  if (typeof gameType !== 'string') {
-    return res.status(400).json({
-      error: 'Invalid data type: gameType must be a string.'
-    });
-  }
-
-  //create a new bot object and push to the array
-  const newBot = {
-    id: bots.length + 1,
-    name: name,
-    gameType: gameType, //"Go-Fish" or "Blackjack"
-    score: 0
-  };
-  bots.push(newBot);
-
-  //respond with a created status and new bot object
-  res.status(201).json(newBot);
 });
 
 //start the server
