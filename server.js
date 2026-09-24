@@ -8,19 +8,19 @@ const { connectDB } = require('./services/database')
 //=======================
 
 // avatar
-const createAvatar = require('./routes/avatar/createAvatar');
-const getAvatars = require('./routes/avatar/getAvatars');
+const createAvatar = require('./routes/avatars/createAvatar');
+const getAvatars = require('./routes/avatars/getAvatars');
 
 // bot
-const createBot = require('./routes/bot/createBot');
-const getBots = require('./routes/bot/getBots');
+const createBot = require('./routes/bots/createBot');
+const getBots = require('./routes/bots/getBots');
 
 // user
-const createUser = require('./routes/user/createUser');
-const getUsers = require('./routes/user/getUsers');
-const getUser = require('./routes/user/getUser');
-const updateUser = require('./routes/user/updateUser');
-const deleteUser = require('./routes/user/deleteUser');
+const createUser = require('./routes/users/createUser');
+const getUsers = require('./routes/users/getUsers');
+const getUser = require('./routes/users/getUser');
+const updateUser = require('./routes/users/updateUser');
+const deleteUser = require('./routes/users/deleteUser');
 
 //===================
 // create express app
@@ -42,11 +42,11 @@ app.post('/api/bots', createBot);
 app.get('/api/bots', getBots);
 
 // user
-app.post('/api/user', createUser);
-app.get('/api/user', getUsers);
-app.get('/api/user/:id', getUser);
-app.put('/api/user/:id', updateUser);
-app.delete('/api/user/:id', deleteUser);
+app.post('/api/users', createUser);
+app.get('/api/users', getUsers);
+app.get('/api/users/:id', getUser);
+app.put('/api/users/:id', updateUser);
+app.delete('/api/users/:id', deleteUser);
 
 //=================
 // start the server
