@@ -33,3 +33,7 @@ The Workquarium web application connects to a shared backend, authentication sys
 ```bash
 node server.js
 ```
+
+## Swagger API
+
+http://localhost:3000/api-docs
