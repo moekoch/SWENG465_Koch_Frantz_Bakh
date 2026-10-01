@@ -1,5 +1,7 @@
+const { getDB } = require('../../services/database');
+
 // POST endpoint to create a new instance of the Avatar resource
-const createAvatar = (req, res) => {
+const createAvatar = async (req, res) => {
   //get data from request body
   const { name, color, price } = req.body;
 
@@ -16,18 +18,32 @@ const createAvatar = (req, res) => {
   }
 
   //create a new avatar object
-  const newAvatar = {
-    id: avatars.length + 1,
-    name: name,
-    color: color,
-    price: price
-  };
+  try{
+    //get database
+    const db = getDB();
 
-  //add new avatar to array
-  avatars.push(newAvatar);
+    //get avatars collection
+    const avatars = db.collection('avatars');
 
-  //respond with created status and new avatar object
-  res.status(201).json(newAvatar);
+    //create avatar document
+    const newAvatar = {
+      name: name,
+      color: color,
+      price: price
+    };
+
+    //insert document into mongo
+    const result = await avatars.insertOne(newAvatar);
+
+    //add mongo generated id to response
+    newAvatar._id = result.insertedId;
+
+    //respond with created status and new avatar
+    res.status(201).json(newAvatar);
+  } catch (error) {
+    console.error('Error creating avatar:', error);
+    res.status(500).json({error: 'Failed to create avatar.'});
+  }
 };
 
 module.exports = createAvatar;
