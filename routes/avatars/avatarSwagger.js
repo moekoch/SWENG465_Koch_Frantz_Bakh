@@ -23,7 +23,7 @@
  *         name:
  *           type: string
  *           description: Name of the avatar
- *           example: Blue Avatar
+ *           example: Koi
  *         color:
  *           type: string
  *           description: Color of the avatar
@@ -31,5 +31,5 @@
  *         price:
  *           type: number
  *           description: Price of the avatar
- *           example: 19.99
+ *           example: 100
  */
