@@ -59,6 +59,7 @@ const getBots = require('./routes/bots/getBots');
 
 // item
 const createItem = require('./routes/items/createItem');
+const deleteItem = require('./routes/items/deleteItem');
 
 // user
 const createUser = require('./routes/users/createUser');
@@ -76,7 +77,7 @@ app.post('/api/avatars', createAvatar);
 app.get('/api/avatars', getAvatars);
 app.get('/api/avatars/:id', getAvatar);
 app.put('/api/avatars/:id', updateAvatar);
-app.put('/api/avatars/:id', deleteAvatar);
+app.delete('/api/avatars/:id', deleteAvatar);
 
 // bot
 app.post('/api/bots', createBot);
@@ -84,6 +85,7 @@ app.get('/api/bots', getBots);
 
 // item
 app.post('/api/items', createItem);
+app.delete('/api/items/:id', deleteItem);
 
 // user
 app.post('/api/users', createUser);
