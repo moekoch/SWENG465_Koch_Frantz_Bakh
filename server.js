@@ -54,11 +54,11 @@ const updateAvatar = require('./routes/avatars/updateAvatar');
 const deleteAvatar = require('./routes/avatars/deleteAvatar');
 
 // chat
-const createAvatar = require('./routes/chats/createChat');
-const getAvatar = require('./routes/chats/getChat');
-const getAvatars = require('./routes/chats/getChats');
-const updateAvatar = require('./routes/chats/updateChat');
-const deleteAvatar = require('./routes/chats/deleteChat');
+const createChat = require('./routes/chats/createChat');
+const getChat = require('./routes/chats/getChat');
+const getChat = require('./routes/chats/getChats');
+const updateChat = require('./routes/chats/updateChat');
+const deleteChat = require('./routes/chats/deleteChat');
 
 // bot
 const createBot = require('./routes/bots/createBot');
@@ -70,6 +70,13 @@ const getItem = require('./routes/items/getItem');
 const getItems = require('./routes/items/getItems');
 const updateItem = require('./routes/items/updateItem');
 const deleteItem = require('./routes/items/deleteItem');
+
+// message
+const createMessage = require('./routes/messages/createMessage');
+const getMessage = require('./routes/messages/getMessage');
+const getMessages = require('./routes/messages/getMessages');
+const updateMessage = require('./routes/messages/updateMessage');
+const deleteMessage = require('./routes/messages/deleteMessage');
 
 // user
 const createUser = require('./routes/users/createUser');
@@ -106,6 +113,13 @@ app.get('/api/items/:id', getItem);
 app.get('/api/items', getItems);
 app.put('/api/items/:id', updateItem);
 app.delete('/api/items/:id', deleteItem);
+
+// message
+app.post('/api/messages', createMessage);
+app.get('/api/messages/:id', getMessage);
+app.get('/api/messages', getMessage);
+app.put('/api/messages/:id', updateMessage);
+app.delete('/api/messages/:id', deleteMessage);
 
 // user
 app.post('/api/users', createUser);
