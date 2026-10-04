@@ -56,7 +56,7 @@ const deleteAvatar = require('./routes/avatars/deleteAvatar');
 // chat
 const createChat = require('./routes/chats/createChat');
 const getChat = require('./routes/chats/getChat');
-const getChat = require('./routes/chats/getChats');
+const getChats = require('./routes/chats/getChats');
 const updateChat = require('./routes/chats/updateChat');
 const deleteChat = require('./routes/chats/deleteChat');
 
@@ -72,11 +72,11 @@ const updateItem = require('./routes/items/updateItem');
 const deleteItem = require('./routes/items/deleteItem');
 
 // message
-const createMessage = require('./routes/messages/createMessage');
-const getMessage = require('./routes/messages/getMessage');
-const getMessages = require('./routes/messages/getMessages');
-const updateMessage = require('./routes/messages/updateMessage');
-const deleteMessage = require('./routes/messages/deleteMessage');
+const createMessage = require('./routes/chats/messages/createMessage');
+const getMessages = require('./routes/chats/messages/getMessages');
+const getMessage = require('./routes/chats/messages/getMessage');
+const updateMessage = require('./routes/chats/messages/updateMessage');
+const deleteMessage = require('./routes/chats/messages/deleteMessage');
 
 // user
 const createUser = require('./routes/users/createUser');

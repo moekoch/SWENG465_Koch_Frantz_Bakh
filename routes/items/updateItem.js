@@ -99,4 +99,4 @@ const updateItem = async (req, res) => {
     }
 };
 
-module.exports = updateItems;
+module.exports = updateItem;
