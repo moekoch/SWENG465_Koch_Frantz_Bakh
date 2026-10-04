@@ -22,7 +22,7 @@
  *         name:
  *           type: string
  *           description: Name of the item
- *           example: Koi
+ *           example: Desk
  *         price:
  *           type: number
  *           description: Price of the item

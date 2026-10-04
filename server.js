@@ -61,6 +61,7 @@ const getBots = require('./routes/bots/getBots');
 const createItem = require('./routes/items/createItem');
 const getItem = require('./routes/items/getItem');
 const getItems = require('./routes/items/getItems');
+const updateItem = require('./routes/items/updateItem');
 const deleteItem = require('./routes/items/deleteItem');
 
 // user
@@ -89,6 +90,7 @@ app.get('/api/bots', getBots);
 app.post('/api/items', createItem);
 app.get('/api/items/:id', getItem);
 app.get('/api/items', getItems);
+app.put('/api/items/:id', updateItem);
 app.delete('/api/items/:id', deleteItem);
 
 // user
