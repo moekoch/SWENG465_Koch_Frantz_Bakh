@@ -1,6 +1,38 @@
 const { ObjectId } = require('mongodb');
 const { getDB } = require('../../services/database');
 
+/**
+ * @swagger
+ * /api/avatars/{id}/price:
+ *   get:
+ *     summary: Get avatar price
+ *     description: Retrieves the price of an avatar by its ID
+ *     tags: [Avatar]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The database ID of the avatar
+ *         schema:
+ *           type: string
+ *           example: 68e2f123456789abcdef123
+ *     responses:
+ *       200:
+ *         description: Avatar price retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 price:
+ *                   type: number
+ *                   description: The price of the avatar
+ *                   example: 19.99
+ *       404:
+ *         description: Avatar not found
+ *       500:
+ *         description: Internal server error, failed to retrieve avatar price
+ */
 const getAvatarPrice = async (req, res) => {
     try {
         //get database
