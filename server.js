@@ -53,6 +53,13 @@ const getAvatars = require('./routes/avatars/getAvatars');
 const updateAvatar = require('./routes/avatars/updateAvatar');
 const deleteAvatar = require('./routes/avatars/deleteAvatar');
 
+// chat
+const createAvatar = require('./routes/chats/createChat');
+const getAvatar = require('./routes/chats/getChat');
+const getAvatars = require('./routes/chats/getChats');
+const updateAvatar = require('./routes/chats/updateChat');
+const deleteAvatar = require('./routes/chats/deleteChat');
+
 // bot
 const createBot = require('./routes/bots/createBot');
 const getBots = require('./routes/bots/getBots');
@@ -81,6 +88,13 @@ app.get('/api/avatars/:id', getAvatar);
 app.get('/api/avatars', getAvatars);
 app.put('/api/avatars/:id', updateAvatar);
 app.delete('/api/avatars/:id', deleteAvatar);
+
+// chat
+app.post('/api/chats', createChat);
+app.get('/api/chats/:id', getChat);
+app.get('/api/chats', getChats);
+app.put('/api/chats/:id', updateChat);
+app.delete('/api/chats/:id', deleteChat);
 
 // bot
 app.post('/api/bots', createBot);
