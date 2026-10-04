@@ -4,9 +4,9 @@ const { getDB } = require('../../services/database');
 /**
  * @swagger
  * /api/friends/{id}:
- *   delete:
- *     summary: Delete a friend
- *     description: Deletes a friend by their ID
+ *   get:
+ *     summary: Get a friend
+ *     description: Retrieves a friend by their ID.
  *     tags: [Friend]
  *     parameters:
  *       - in: path
@@ -18,21 +18,17 @@ const { getDB } = require('../../services/database');
  *           example: 507f1f77bcf86cd799439011
  *     responses:
  *       200:
- *         description: Friend deleted successfully
+ *         description: Friend retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Friend deleted successfully
+ *               $ref: '#/components/schemas/Friend'
  *       404:
  *         description: Friend not found
  *       500:
- *         description: Internal server error, failed to delete friend
+ *         description: Internal server error, failed to retrieve friend
  */
-const deleteFriend = async (req, res) => {
+const getFriend = async (req, res) => {
     try {
         // get database
         const db = getDB();
@@ -40,24 +36,28 @@ const deleteFriend = async (req, res) => {
         // get friends collection
         const friends = db.collection('friends');
 
-        // delete the friend by ID
-        const result = await friends.deleteOne({
+        // retrieve friend by ID
+        const friend = await friends.findOne({
             _id: new ObjectId(req.params.id)
         });
 
-        // check if any document was deleted
-        if (result.deletedCount === 0) {
+        // check if friend exists
+        if (!friend) {
             return res.status(404).json({
                 error: 'Friend not found.'
             });
         }
 
-        // send ok status and message of success
-        res.status(200).json({message: 'Friend deleted successfully.'});
+        // return ok status and friend data
+        res.status(200).json(friend);
+
     } catch (error) {
-        console.error('Error deleting friend:', error);
-        res.status(500).json({error: 'Failed to delete friend.'});
+        console.error('Error retrieving friend:', error);
+
+        res.status(500).json({
+            error: 'Failed to retrieve friend.'
+        });
     }
 };
 
-module.exports = deleteFriend;
+module.exports = getFriend;
