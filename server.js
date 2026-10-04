@@ -49,6 +49,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 // avatar
 const createAvatar = require('./routes/avatars/createAvatar');
 const getAvatars = require('./routes/avatars/getAvatars');
+const getAvatar = require('./routes/avatars/getAvatar');
 
 // bot
 const createBot = require('./routes/bots/createBot');
@@ -68,6 +69,7 @@ const deleteUser = require('./routes/users/deleteUser');
 // avatar
 app.post('/api/avatars', createAvatar);
 app.get('/api/avatars', getAvatars);
+app.get('/api/avatars/:id', getAvatar);
 
 // bot
 app.post('/api/bots', createBot);
