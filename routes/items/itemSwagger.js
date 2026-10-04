@@ -9,7 +9,7 @@
  * @swagger
  * components:
  *   schemas:
- *     Avatar:
+ *     Item:
  *       type: object
  *       required:
  *         - name
