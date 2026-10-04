@@ -48,8 +48,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // avatar
 const createAvatar = require('./routes/avatars/createAvatar');
-const getAvatars = require('./routes/avatars/getAvatars');
 const getAvatar = require('./routes/avatars/getAvatar');
+const getAvatars = require('./routes/avatars/getAvatars');
 const updateAvatar = require('./routes/avatars/updateAvatar');
 const deleteAvatar = require('./routes/avatars/deleteAvatar');
 
@@ -59,6 +59,7 @@ const getBots = require('./routes/bots/getBots');
 
 // item
 const createItem = require('./routes/items/createItem');
+const getItem = require('./routes/items/getItem');
 const deleteItem = require('./routes/items/deleteItem');
 
 // user
@@ -74,8 +75,8 @@ const deleteUser = require('./routes/users/deleteUser');
 
 // avatar
 app.post('/api/avatars', createAvatar);
-app.get('/api/avatars', getAvatars);
 app.get('/api/avatars/:id', getAvatar);
+app.get('/api/avatars', getAvatars);
 app.put('/api/avatars/:id', updateAvatar);
 app.delete('/api/avatars/:id', deleteAvatar);
 
@@ -85,6 +86,7 @@ app.get('/api/bots', getBots);
 
 // item
 app.post('/api/items', createItem);
+app.get('/api/items/:id', getItem);
 app.delete('/api/items/:id', deleteItem);
 
 // user
