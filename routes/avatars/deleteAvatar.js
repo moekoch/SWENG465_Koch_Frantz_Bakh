@@ -1,6 +1,37 @@
 const { ObjectId } = require('mongodb');
 const { getDB } = require('../../services/database');
 
+/**
+ * @swagger
+ * /api/avatars/{id}:
+ *   delete:
+ *     summary: Delete an avatar
+ *     description: Deletes an avatar by its ID
+ *     tags: [Avatar]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The database ID of the avatar
+ *         schema:
+ *           type: string
+ *           example: 68e2f123456789abcdef123
+ *     responses:
+ *       200:
+ *         description: Avatar deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Avatar deleted successfully
+ *       404:
+ *         description: Avatar not found
+ *       500:
+ *         description: Internal server error, failed to delete avatar
+ */
 const deleteAvatar = async (req, res) => {
     try {
         // get database
