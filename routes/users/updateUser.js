@@ -1,40 +1,99 @@
-//PUT - Update one user's info
-const updateUser = (req, res) => {
-  const userId = Number(req.params.id);
-  const { name, email } = req.body;
+const { ObjectId } = require('mongodb');
+const { getDB } = require('../../services/database');
 
-  if (!name || !email) {
-    return res.status(400).json({
-      message: 'Name and email are required'
-    });
-  }
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   put:
+ *     summary: Update a user
+ *     description: Updates one or more fields of an existing user.
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The database ID of the user
+ *         schema:
+ *           type: string
+ *           example: 507f1f77bcf86cd799439011
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The name of the user
+ *                 example: John Doe
+ *               email:
+ *                 type: string
+ *                 description: The email of the user
+ *                 example: john.doe@example.com
+ *               id:
+ *                 type: number
+ *                 description: The ID of the user
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: No fields were provided or price has an invalid data type
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error, failed to update user
+ */
+const updateUser = async (req, res) => {
+    try {
+        // extract fields from request body
+        const { name, email } = req.body;
 
-  const userIndex = users.findIndex((user) => user.id === userId);
+        // check that at least one field was provided
+        if (name === undefined && email === undefined) {
+            return res.status(400).json({error: 'At least one field must be provided.'});
+        }
 
-  if (userIndex === -1) {
-    return res.status(404).json({
-      message: 'User not found'
-    });
-  }
+        // get database
+        const db = getDB();
 
-  const emailAlreadyUsed = users.find(
-    (user) => user.email === email && user.id !== userId
-  );
+        // get users collection
+        const users = db.collection('users');
 
-  if (emailAlreadyUsed) {
-    return res.status(409).json({
-      message: 'A different user already uses that email'
-    });
-  }
+        // add fields to updates if they are provided
+        const updates = {};
+        if (name !== undefined) updates.name = name;
+        if (email !== undefined) updates.email = email;
 
-  const updatedUser = {
-    id: userId,
-    name,
-    email
-  };
+        // update the user in the database
+        const result = await users.updateOne(
+            { _id: new ObjectId(req.params.id) },
+            { $set: updates }
+        );
 
-  users[userIndex] = updatedUser;
-  res.status(200).json(updatedUser);
+        // check if any document was matched and updated
+        if (result.matchedCount === 0) {
+            return res.status(404).json({
+                error: 'User not found.'
+            });
+        }
+
+        // retrieve the updated user
+        const updatedUser = await users.findOne({
+            _id: new ObjectId(req.params.id)
+        });
+
+        // return the updated user
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({error: 'Failed to update user.'});
+    }
 };
 
 module.exports = updateUser;

@@ -1,28 +1,73 @@
-//POST - create a new user
-const createUser = (req, res) => {
-  const { name, email } = req.body;
+const { getDB } = require('../../services/database');
 
-    if (!name || !email) {
-      return res.status(400).json({
-        message: 'Name and email are required'
-      });
-    }
+/**
+ * @swagger
+ * /api/users:
+ *   post:
+ *     summary: Create a new user
+ *     description: Creates a new user and stores it in the database
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request, missing required fields or invalid data types
+ *       500:
+ *         description: Internal server error, failed to create user
+ */
+const createUser = async (req, res) => {
+  //get data from request body
+  const { name, email, id } = req.body;
 
-    const existingUser = users.find((user) => user.email === email);
-    if (existingUser) {
-      return res.status(409).json({
-      	message: 'A user with that email already exists'
-      });
-    }
+  // POST endpoint check to ensure the data sent from the client is valid
+  if(!name || !email || !id){ //validate required fields
+    return res.status(400).json({
+      error: 'Missing required fields: name, email, and id are required.'
+    })
+  }
+  if(typeof id !== 'number'){ //validate id is a number
+    return res.status(400).json({
+      error: 'Invalid data type: id must be a number.'
+    })
+  }
 
+  //create a new user object
+  try{
+    //get database
+    const db = getDB();
+
+    //get users collection
+    const users = db.collection('users');
+
+    //create user document
     const newUser = {
-      id: nextUserId++,
-      name,
-      email
+      name: name,
+      email: email,
+      id: id
     };
 
-    users.push(newUser);
+    //insert document into mongo
+    const result = await users.insertOne(newUser);
+
+    //add mongo generated id to response
+    newUser._id = result.insertedId;
+
+    //respond with created status and new user
     res.status(201).json(newUser);
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).json({error: 'Failed to create user.'});
+  }
 };
 
 module.exports = createUser;
