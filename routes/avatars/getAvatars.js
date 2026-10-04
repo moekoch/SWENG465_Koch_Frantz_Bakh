@@ -1,6 +1,24 @@
 const { getDB } = require('../../services/database');
 
-// GET endpoint to retrieve all instances of the Avatar resource
+/**
+ * @swagger
+ * /api/avatars:
+ *   get:
+ *     summary: Get all avatars
+ *     description: Retrieves a list of all avatars from the database
+ *     tags: [Avatar]
+ *     responses:
+ *       200:
+ *         description: A list of avatars
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Avatar'
+ *       500:
+ *         description: Internal server error, failed to retrieve avatars
+ */
 const getAvatars = async (req, res) => {
   try {
     //get database

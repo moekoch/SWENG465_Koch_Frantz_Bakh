@@ -1,6 +1,30 @@
 const { getDB } = require('../../services/database');
 
-// POST endpoint to create a new instance of the Avatar resource
+/**
+ * @swagger
+ * /api/avatars:
+ *   post:
+ *     summary: Create a new avatar
+ *     description: Creates a new avatar and stores it in the database
+ *     tags: [Avatar]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Avatar'
+ *     responses:
+ *       201:
+ *         description: Avatar created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Avatar'
+ *       400:
+ *         description: Bad request, missing required fields or invalid data types
+ *       500:
+ *         description: Internal server error, failed to create avatar
+ */
 const createAvatar = async (req, res) => {
   //get data from request body
   const { name, color, price } = req.body;
