@@ -1,4 +1,4 @@
-# 🐠🐠🐠 Worquarium API - Swagger & Postman Setip
+# 🐠🐠🐠 Worquarium API - Swagger & Postman Setup
 
 ## Setup
 
