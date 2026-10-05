@@ -12,6 +12,8 @@ On Windows, you can also manually copy `.env.example` and rename it to `.env`.
 
 2. Fill in the required environment variables in `.env`.
 
+> **Note:** The `.env` file requires your MongoDB username and password to connect to the database. Use `.env.example` as a template when setting up your local environment.
+
 3. Install dependencies:
 
 ```bash
