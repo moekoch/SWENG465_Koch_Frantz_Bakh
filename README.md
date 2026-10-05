@@ -1,39 +1,67 @@
-# 🐠🐠🐠 Workquarium — Web 
+# 🐠🐠🐠 Worquarium API - Swagger & Postman Setip
 
-Workquarium is a virtual underwater social and coworking platform where users can focus, socialize, play games, and connect with others.
+## Setup
 
-## Features
+1. Create your `.env` file from the provided example:
 
-- Virtual coworking spaces
-- Silent and group focus sessions
-- Creature-based user statuses and presence
-- Public and private rooms
-- Tankmate/friend system
-- Real-time chat and optional calls
-- Multiplayer games and social activities
-- Personal aquarium customization
-- Points, achievements, and progression
-- Language translation compatibility
-- Light/Dark modes 
+```bash
+cp .env.example .env
+```
 
-## Tech Stack
+On Windows, you can also manually copy `.env.example` and rename it to `.env`.
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- Socket.IO
+2. Fill in the required environment variables in `.env`.
 
-## Architecture
+3. Install dependencies:
 
-The Workquarium web application connects to a shared backend, authentication system, and database used by both the web and mobile applications.
+```bash
+npm install
+```
 
-## Run Server
+4. Start the server:
 
 ```bash
 node server.js
 ```
 
-## Swagger API
+The API will run at:
 
+```text
+http://localhost:3000
+```
+
+## Swagger Documentation
+
+Once the server is running, view the API documentation at:
+
+```text
 http://localhost:3000/api-docs
+```
+
+Swagger provides the available endpoints, request parameters, request bodies, and response formats.
+
+## Postman Testing
+
+Use **Postman** to test the API endpoints.
+
+Import the provided Swagger/OpenAPI definition into Postman to create a collection of the available endpoints.
+
+For local testing, use:
+
+```text
+http://localhost:3000
+```
+
+For routes containing `{id}`, replace it with the actual resource ID. For example:
+
+```text
+GET /api/avatars/{id}
+```
+
+becomes:
+
+```text
+GET http://localhost:3000/api/avatars/123
+```
+
+Keep `node server.js` running while testing requests in Postman.
