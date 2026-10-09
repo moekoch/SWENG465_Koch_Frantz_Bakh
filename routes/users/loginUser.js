@@ -31,39 +31,17 @@ const { getDB } = require('../../services/database');
  */
 async function loginUser(req, res) {
     try {
-        const { username, email, password } = req.body;
+        const { username, password } = req.body;
 
-        if (!username || !email || !password) {
-            return res.status(400).json({ error: 'Username, email, and password are required' });
+        if (!username || !password) {
+            return res.status(400).json({ error: 'Username and password are required' });
         }
 
-        // emails are stored trimmed and lowercase (see createUser)
-        const normalizedEmail = String(email).trim().toLowerCase();
+        const user = await getDB().collection('users').findOne({ username });
 
-        const users = getDB().collection('users');
-        const user = await users.findOne({ username, email: normalizedEmail });
-
-        if (!user) {
-            // does the username or the email belong to someone?
-            const partial = await users.findOne({
-                $or: [{ username }, { email: normalizedEmail }]
-            });
-
-            if (partial) {
-                // an account exists but the details don't match: a normal login failure
-                return res.status(401).json({ error: 'Invalid username, email, or password' });
-            }
-
-            // nothing matches at all: the frontend can offer to create an account
-            return res.status(404).json({
-                error: 'No account found.',
-                code: 'ACCOUNT_NOT_FOUND'
-            });
-        }
-
-        const ok = user.passwordHash && (await bcrypt.compare(password, user.passwordHash));
+        const ok = user?.passwordHash && (await bcrypt.compare(password, user.passwordHash));
         if (!ok) {
-            return res.status(401).json({ error: 'Invalid username, email, or password' });
+            return res.status(401).json({ error: 'Invalid username or password' });
         }
 
         // never send the hash back
