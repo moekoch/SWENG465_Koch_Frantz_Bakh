@@ -3,7 +3,7 @@ const { getDB } = require('../../services/database');
 
 /**
  * @swagger
- * /api/itmes/{id}:
+ * /api/items/{id}:
  *   put:
  *     summary: Update an item
  *     description: Updates one or more fields of an existing item.
@@ -92,7 +92,7 @@ const updateItem = async (req, res) => {
         });
 
         // return the updated item
-        res.status(200).json(updatedItems);
+        res.status(200).json(updatedItem);
     } catch (error) {
         console.error('Error updating item:', error);
         res.status(500).json({error: 'Failed to update item.'});
