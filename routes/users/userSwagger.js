@@ -21,7 +21,7 @@
  *           type: string
  *           readOnly: true
  *           description: MongoDB generated ID
- *           example: 507f1f77bcf86cd799439011
+ *           example: 6ac8dc29395d18c513fe544b
  *         username:
  *           type: string
  *           description: Unique username used to log in
