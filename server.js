@@ -11,6 +11,9 @@ const PORT = 3000;
 const app = express();
 app.use(express.json());
 
+const cors = require('cors');
+app.use(cors({ origin: 'http://localhost:5173' }));
+
 //======================
 // swagger configuration
 //======================
@@ -79,6 +82,7 @@ const updateMessage = require('./routes/chats/messages/updateMessage');
 const deleteMessage = require('./routes/chats/messages/deleteMessage');
 
 // user
+const loginUser = require('./routes/users/loginUser');
 const createUser = require('./routes/users/createUser');
 const getUsers = require('./routes/users/getUsers');
 const getUser = require('./routes/users/getUser');
@@ -122,6 +126,7 @@ app.put('/api/messages/:id', updateMessage);
 app.delete('/api/messages/:id', deleteMessage);
 
 // user
+app.post('/api/login', loginUser);
 app.post('/api/users', createUser);
 app.get('/api/users', getUsers);
 app.get('/api/users/:id', getUser);

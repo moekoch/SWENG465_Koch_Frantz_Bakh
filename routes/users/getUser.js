@@ -6,7 +6,7 @@ const { getDB } = require('../../services/database');
  * /api/users/{id}:
  *   get:
  *     summary: Get a user
- *     description: Retrieves a user by their ID.
+ *     description: Retrieves a user by their ID. The password hash is never returned.
  *     tags: [User]
  *     parameters:
  *       - in: path
@@ -36,10 +36,11 @@ const getUser = async (req, res) => {
         // get users collection
         const users = db.collection('users');
 
-        // retrieve user by ID
-        const user = await users.findOne({
-            _id: new ObjectId(req.params.id)
-        });
+        // retrieve user by ID, leaving out the password hash
+        const user = await users.findOne(
+            { _id: new ObjectId(req.params.id) },
+            { projection: { passwordHash: 0 } }
+        );
 
         // check if user exists
         if (!user) {

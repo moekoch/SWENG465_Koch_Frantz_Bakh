@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const { ObjectId } = require('mongodb');
 const { getDB } = require('../../services/database');
 
@@ -6,7 +7,7 @@ const { getDB } = require('../../services/database');
  * /api/users/{id}:
  *   put:
  *     summary: Update a user
- *     description: Updates one or more fields of an existing user.
+ *     description: Updates one or more fields of an existing user. A new password is hashed before it is stored.
  *     tags: [User]
  *     parameters:
  *       - in: path
@@ -23,18 +24,20 @@ const { getDB } = require('../../services/database');
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               username:
  *                 type: string
- *                 description: The name of the user
- *                 example: John Doe
+ *                 description: The username of the user
+ *                 example: testuser
  *               email:
  *                 type: string
  *                 description: The email of the user
  *                 example: john.doe@example.com
- *               id:
- *                 type: number
- *                 description: The ID of the user
- *                 example: 1
+ *               password:
+ *                 type: string
+ *                 writeOnly: true
+ *                 minLength: 8
+ *                 description: A new password, at least 8 characters
+ *                 example: newpassword123
  *     responses:
  *       200:
  *         description: User updated successfully
@@ -43,20 +46,32 @@ const { getDB } = require('../../services/database');
  *             schema:
  *               $ref: '#/components/schemas/User'
  *       400:
- *         description: No fields were provided or price has an invalid data type
+ *         description: No fields were provided or a field is invalid
  *       404:
  *         description: User not found
+ *       409:
+ *         description: Username or email is already taken
  *       500:
  *         description: Internal server error, failed to update user
  */
 const updateUser = async (req, res) => {
     try {
         // extract fields from request body
-        const { name, email } = req.body;
+        const { username, email, password } = req.body;
 
         // check that at least one field was provided
-        if (name === undefined && email === undefined) {
+        if (username === undefined && email === undefined && password === undefined) {
             return res.status(400).json({error: 'At least one field must be provided.'});
+        }
+
+        // validate the fields that were provided
+        if (email !== undefined &&
+            (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))) {
+            return res.status(400).json({error: 'Invalid email address.'});
+        }
+        if (password !== undefined &&
+            (typeof password !== 'string' || password.length < 8)) {
+            return res.status(400).json({error: 'Password must be at least 8 characters.'});
         }
 
         // get database
@@ -65,14 +80,34 @@ const updateUser = async (req, res) => {
         // get users collection
         const users = db.collection('users');
 
+        const userId = new ObjectId(req.params.id);
+
         // add fields to updates if they are provided
         const updates = {};
-        if (name !== undefined) updates.name = name;
-        if (email !== undefined) updates.email = email;
+        if (username !== undefined) updates.username = username;
+        if (email !== undefined) updates.email = email.trim().toLowerCase();
+        if (password !== undefined) updates.passwordHash = await bcrypt.hash(password, 12);
+
+        // username and email must stay unique (ignore this same user)
+        const conflicts = [];
+        if (updates.username) conflicts.push({ username: updates.username });
+        if (updates.email) conflicts.push({ email: updates.email });
+        if (conflicts.length > 0) {
+            const existing = await users.findOne({
+                _id: { $ne: userId },
+                $or: conflicts
+            });
+            if (existing) {
+                const error = existing.username === updates.username
+                    ? 'Username is already taken.'
+                    : 'Email is already registered.';
+                return res.status(409).json({ error });
+            }
+        }
 
         // update the user in the database
         const result = await users.updateOne(
-            { _id: new ObjectId(req.params.id) },
+            { _id: userId },
             { $set: updates }
         );
 
@@ -83,10 +118,11 @@ const updateUser = async (req, res) => {
             });
         }
 
-        // retrieve the updated user
-        const updatedUser = await users.findOne({
-            _id: new ObjectId(req.params.id)
-        });
+        // retrieve the updated user, leaving out the password hash
+        const updatedUser = await users.findOne(
+            { _id: userId },
+            { projection: { passwordHash: 0 } }
+        );
 
         // return the updated user
         res.status(200).json(updatedUser);
